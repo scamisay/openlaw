@@ -1,0 +1,6 @@
+mongodump --db openLaw --out .
+
+
+#cargo la base en mongodb
+tar xvfz openLaw.tar.gz
+mongorestore --db openLaw openLaw/

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:include="fragments/headerinc :: head"></th:block>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <th:block th:include="fragments/navigation :: navigation"></th:block>
+
+    <!-- Page Content -->
+    <div id="page-wrapper">
+
+
+        <div class="row">
+
+
+            <div class="col-md-12">
+                <div class="table-responsive">
+
+                    <table id="mytable" class="table table-bordred table-striped">
+
+                        <thead>
+
+                        <th>Título</th>
+                        <th>Número</th>
+                        <th>Tipo</th>
+                        <th>Edit</th>
+
+                        </thead>
+                        <tbody>
+                        <tr th:each="law : ${list}">
+                            <td th:text="${law.title}">un nombre de ley</td>
+                            <td th:text="${law.number}">numero de ley</td>
+                            <td th:text="${law.type}">tipo de ley</td>
+                            <td>
+                                <p data-placement="top" data-toggle="tooltip" title="Edit">
+                                    <a class="btn btn-primary btn-xs" data-title="Edit" th:href="@{edit(id=${law.id})}">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                </p>
+                            </td>
+                        </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+
+
+
+
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<th:block th:include="fragments/footer :: footer"></th:block>
+
+</body>
+
+</html>

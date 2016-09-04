@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:include="fragments/headerinc :: head"></th:block>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <th:block th:include="fragments/navigation :: navigation"></th:block>
+
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Nueva ley</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <form role="form" th:action="@{/law/save}" th:object="${law}" method="post">
+                                        <div class="form-group">
+                                            <label>Nombre</label>
+                                            <input class="form-control" th:field="*{title}"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Número</label>
+                                            <input class="form-control" th:field="*{number}"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>General</label>
+                                            <textarea th:field="*{general}" class="form-control" rows="3"></textarea>
+                                        </div>
+
+
+
+                                        <!-- Articulos -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Articulos</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button type="button" class="btn btn-success addButton pull-right" onclick="addRowAddress();">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="articleGroup">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="control-label articleNumber">Articulo 1</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-danger removeButton pull-right" onclick="deleteArticle($(this).parents('.articleGroup'));">
+                                                            <i class="fa fa-remove"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea th:field="*{articles[0].general}" class="form-control" rows="3"></textarea>
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+
+
+            </div>
+
+
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<th:block th:include="fragments/footer :: footer"></th:block>
+
+<script src="../static/js/variableFieldNumber.js"  th:src="@{/js/variableFieldNumber.js}"></script>
+<script src="../static/js/articleOperators.js"  th:src="@{/js/articleOperators.js}"></script>
+
+
+</body>
+
+</html>

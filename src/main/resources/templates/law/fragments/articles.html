@@ -1,0 +1,47 @@
+<html>
+<head></head>
+<body>
+
+<th:block th:fragment="articles">
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Articulos</label>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-success addButton pull-right" onclick="addRowAddress();">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="articleGroup" th:each="article,index : ${law.articles}">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label articleNumberText" th:text="'Articulo '+${index.count}"></label>
+                </div>
+                <input type="hidden" class="articleNumber" th:value="${index.count}"/>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-default pull-right" onclick="editArticle($(this).parents('.articleGroup'));">
+                        <i class="fa fa-edit"></i>
+                    </button>
+
+                    <button type="button" class="btn btn-danger removeButton pull-right" onclick="deleteArticle($(this).parents('.articleGroup'));">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <textarea th:text="${article.general}" class="form-control" rows="3"></textarea>
+        </div>
+    </div>
+
+</th:block>
+
+</body>
+</html>

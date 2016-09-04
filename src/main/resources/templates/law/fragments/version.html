@@ -1,0 +1,23 @@
+<html>
+<head></head>
+<body>
+
+<th:block th:fragment="version">
+
+<form role="form" th:action="@{/law/save}" th:object="${law}" method="post">
+
+    <input type="hidden" th:field="*{id}" id="lawId"/>
+    <input type="hidden" th:field="*{versionId}" id="versionId"/>
+
+    <div class="form-group">
+        <textarea th:field="*{general}" class="form-control" rows="3"></textarea>
+    </div>
+
+    <th:block th:include="law/fragments/articles :: articles"></th:block>
+
+</form>
+
+</th:block>
+
+</body>
+</html>
