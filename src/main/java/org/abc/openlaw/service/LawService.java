@@ -1,89 +1,32 @@
 package org.abc.openlaw.service;
 
-import org.abc.openlaw.domain.Article;
 import org.abc.openlaw.domain.Law;
 import org.abc.openlaw.domain.LawVersion;
-import org.abc.openlaw.repository.LawRepository;
-import org.abc.openlaw.repository.LawVersionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by scamisay on 05/02/16.
+ * Created by scamisay on 04/09/16.
  */
-@Service
-public class LawService {
+public interface LawService {
 
-    @Autowired
-    private LawVersionRepository lawVersionRepository;
+    Law saveLaw(Law law);
 
-    @Autowired
-    private LawRepository lawRepository;
+    List<Law> findAllLaws();
 
-    public Law saveLaw(Law law){
-        for(LawVersion aVersion : law.getVersions()){
-            if(aVersion.isNew()){
-                lawVersionRepository.save(aVersion);
-            }
-        }
+    Law findLawById(String lawId);
 
-        //armo un arreglo con las referencia a las versiones
-        law.copyVersionIds();
+    LawVersion editArticle(Law law, Integer articleNumber, String articleValue);
 
-        return lawRepository.save(law);
-    }
+    LawVersion editArticles(Law law, Map<Integer, String> mapArticlesNumberValues);
 
-    public List<LawVersion> findAllVersions(){
-        return lawVersionRepository.findAll();
-    }
+    Law deleteArticles(Law law, Map<Integer, String> mapArticlesNumberValues);
 
-    public LawVersion saveVersion(LawVersion aLaw){
-        return lawVersionRepository.save(aLaw);
-    }
+    Law addArticles(Law law, Map<Integer, String> mapArticlesNumberValues);
 
-    public List<Law> findAllLaws() {
-        return lawRepository.findAll();
-    }
+    Law cloneLaw(Law law);
 
-    public Law findLawById(String lawId) {
-        Law law = lawRepository.findOne(lawId);
-        for(String versionId : law.getLawVersionIds()){
-            law.addNewLawVersion(lawVersionRepository.findOne(versionId));
-        }
-        return law;
-    }
+    Law mergeLaws(Law law1, Law law2);
 
-    public LawVersion editArticle(Law law, Integer articleNumber, String articleValue) {
-        LawVersion previousLawVersion = law.getLastVersion();
-
-        //normalizo el texto que puede venir con retorno de carro
-        String persistedArticle = previousLawVersion.getArticles()
-                .get(articleNumber-1).getGeneral()
-                .replaceAll("\r","");
-        /**
-         * si no hubo cambios => no se genera ninguna version nueva
-         */
-        if(persistedArticle.equals(articleValue)){
-            return null;
-        }
-
-        /**
-         * guardando nueva version en forma de listas con elementos nulos
-         */
-        Integer size = law.getLastVersion().getArticles().size();
-        Article[] articles = new Article[size];
-        articles[articleNumber-1] = new Article(articleValue);
-        List<Article> modifiedArticles = Arrays.asList(articles);
-        LawVersion modifiedLawVersion = new LawVersion(previousLawVersion.getGeneral(), modifiedArticles);
-
-        law.addNewLawVersion(modifiedLawVersion);
-
-        //TODO: persistir ley modificada
-     //   saveLaw(law);
-
-        return modifiedLawVersion;
-    }
 }

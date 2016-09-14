@@ -3,9 +3,8 @@ package org.abc.openlaw.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * Created by scamisay on 07/02/16.
@@ -24,6 +23,8 @@ public class Law {
     private Integer number;
 
     private Date publicationDate;
+
+    private List<List<ModificationPair>> modificationHistory;
 
     /**
      * se popula en la capa de servicio
@@ -47,6 +48,21 @@ public class Law {
         this.number = number;
     }
 
+    private List<List<ModificationPair>> initModificationHistoryFromVersion(LawVersion version) {
+        List<List<ModificationPair>> history = new ArrayList<>();
+
+        IntStream.range(0, version.getArticles().size()).forEach(
+            i -> history.add( Arrays.asList(new ModificationPair(0, i)) )
+        );
+
+        return history;
+
+    }
+
+    public void addElementToArticleModificationHistory(Integer articleIndex, ModificationPair element){
+        modificationHistory.get(articleIndex).add(element);
+    }
+
     private void lawVersionAssertion(LawVersion aLawVersion){
         if(aLawVersion == null){
             throw new RuntimeException("LawVersion is mandatory");
@@ -61,6 +77,9 @@ public class Law {
         }
 
         versions.add(aLawVersion);
+        if(versions.size() == 1){
+            initModificationHistoryFromVersion(versions.get(0));
+        }
     }
 
 
@@ -139,8 +158,24 @@ public class Law {
         return lawVersionIds;
     }
 
+    public List<List<ModificationPair>> getModificationHistory() {
+        return modificationHistory;
+    }
+
+    public void setModificationHistory(List<List<ModificationPair>> modificationHistory) {
+        this.modificationHistory = modificationHistory;
+    }
+
     @Transient
     public LawVersion getLastVersion() {
         return getVersions().get(getVersions().size() - 1);
+    }
+
+    public ModificationPair createModificationPair(Integer articleIndex) {
+        return new ModificationPair( getLastVersionIndex(), articleIndex);
+    }
+
+    private int getLastVersionIndex() {
+        return getVersions().size() - 1;
     }
 }
